@@ -1,0 +1,71 @@
+version: 2.1
+
+.helloworld: &helloworld_steps
+  - checkout
+
+  - run:
+      name: say hello world
+      command: |
+        echo "Hello world"
+
+jobs:
+  helloworld_linux_docker:
+    parameters:
+      resource_class:
+        type: string
+    docker:
+      - image: busybox:latest
+    resource_class: "<< parameters.resource_class >>"
+    steps: *helloworld_steps
+
+  helloworld_linux_machine:
+    parameters:
+      resource_class:
+        type: string
+    machine:
+      image: ubuntu-2204:2022.10.2
+    resource_class: "<< parameters.resource_class >>"
+    steps: *helloworld_steps
+
+  helloworld_windows_machine:
+    parameters:
+      resource_class:
+        type: string
+    machine:
+      image: windows-server-2022-gui:current
+      shell: powershell.exe -ExecutionPolicy Bypass
+    resource_class: "<< parameters.resource_class >>"
+    steps: *helloworld_steps
+
+  helloworld_macos_machine:
+    parameters:
+      resource_class:
+        type: string
+    macos:
+      xcode: 14.2.0
+    resource_class: "<< parameters.resource_class >>"
+    steps: *helloworld_steps
+
+workflows:
+  version: 2
+  helloworld:
+    jobs:
+      - helloworld_linux_docker:
+          matrix:
+            parameters:
+              resource_class: ["small", "medium", "medium+", "large", "arm.medium", "arm.large"]
+
+      - helloworld_linux_machine:
+          matrix:
+            parameters:
+              resource_class: ["medium", "large", "arm.medium", "arm.large"]
+
+      - helloworld_windows_machine:
+          matrix:
+            parameters:
+              resource_class: ["windows.medium", "windows.large"]
+
+      - helloworld_macos_machine:
+          matrix:
+            parameters:
+              resource_class: ["macos.x86.medium.gen2"]

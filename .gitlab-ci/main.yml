@@ -1,0 +1,36 @@
+stages:
+  - helloworld
+
+helloworld_linux:
+  stage: helloworld
+  parallel:
+    matrix:
+      - runner_tag:
+        - saas-linux-small-amd64
+        - saas-linux-medium-amd64
+  tags: [ "${runner_tag}" ]
+  image: busybox:latest
+  script:
+    - echo "Hello world"
+
+helloworld_windows:
+  stage: helloworld
+  parallel:
+    matrix:
+      - runner_tag:
+        - saas-windows-medium-amd64
+  tags: [ "${runner_tag}" ]
+  image: busybox:latest
+  script:
+    - echo "Hello world"
+
+helloworld_macos:
+  stage: helloworld
+  parallel:
+    matrix:
+      - runner_tag:
+        - saas-macos-medium-m1
+  tags: [ "${runner_tag}" ]
+  image: macos-14-xcode-15
+  script:
+    - echo "Hello world"

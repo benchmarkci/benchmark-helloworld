@@ -1,0 +1,34 @@
+name: artifacts
+
+on: [push]
+
+jobs:
+  helloworld_linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: say hello world
+        run: |
+          echo "Hello world"
+
+  helloworld_windows:
+    runs-on: windows-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: say hello world
+        run: |
+          echo "Hello world"
+
+  helloworld_macos:
+    runs-on: macos-14
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: say hello world
+        run: |
+          echo "Hello world"
